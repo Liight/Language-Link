@@ -5,9 +5,11 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
-    "android": "react-native run-android"
+    "android": "react-native run-android",
+    "clean-and-build": "cd android && gradlew clean && cd.. && react-native run-android"
   },
   "dependencies": {
+    "@google-cloud/vision": "^0.24.0",
     "react": "16.6.3",
     "react-native": "0.58.4",
     "react-native-image-picker": "^0.28.0"
