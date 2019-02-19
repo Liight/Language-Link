@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "446716526216",
+    "firebase_url": "https://language-link.firebaseio.com",
+    "project_id": "language-link",
+    "storage_bucket": "language-link.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:446716526216:android:e58501c63eb264c9",
+        "android_client_info": {
+          "package_name": "com.languagelink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "446716526216-jdaoan3on135ebavqvdfjc1geeaabqg2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJdA6f0XNeu4TRoyPZc8LUqifq5z1znMk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
