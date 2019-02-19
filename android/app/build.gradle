@@ -134,6 +134,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-core:16.0.7'
     implementation project(':react-native-image-picker')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
@@ -147,3 +148,5 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+apply plugin: 'com.google.gms.google-services'
