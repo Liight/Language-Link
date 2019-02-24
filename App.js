@@ -6,12 +6,15 @@ import {
   View,
   Button,
   Image,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 
 export default class App extends Component {
   state = {
+    showWelcome: true,
+    showButton: true,
+    loading: false,
     pickedImage: {},
     analysedImageData: [],
     translatedData: [],
@@ -19,7 +22,6 @@ export default class App extends Component {
   };
 
   pickImageHandler = () => {
-    // Image Picker
     ImagePicker.launchCamera(
       {
         title: "Aim at the thing"
@@ -38,7 +40,7 @@ export default class App extends Component {
           this.processImageHandler(res.data);
           console.log(
             "base64 encode has been added to state: " +
-            this.state.pickedImage.base64
+              this.state.pickedImage.base64
           );
         }
       }
@@ -46,12 +48,10 @@ export default class App extends Component {
   };
 
   processImageHandler = base64EncodedImage => {
-    // Image Processer
     console.log("process image started");
     fetch(
       "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw",
       {
-        // handshake
         method: "POST",
         body: JSON.stringify({
           requests: [
@@ -79,23 +79,22 @@ export default class App extends Component {
             ...oldState,
             analysedImageData: responseJson
           };
-        }
-          , this.translateWordsHandler(responseJson));
+        }, this.translateWordsHandler(responseJson));
       })
       .catch(error => {
         console.error(error);
       });
-
   };
 
-  translateWordsHandler = (wordsResponse) => {
+  translateWordsHandler = wordsResponse => {
     // Translation processor
     let wordsList = [];
-    wordsList = wordsResponse.responses[0].labelAnnotations.map((item, index) => {
-      return item.description
-    });
+    wordsList = wordsResponse.responses[0].labelAnnotations.map(
+      (item, index) => {
+        return item.description;
+      }
+    );
     wordsList = wordsList.join();
-    // console.log("words list : ", wordsList);
     // API Call
     const baseURL = "https://translation.googleapis.com/language/translate/v2";
     const key = "?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw";
@@ -103,24 +102,22 @@ export default class App extends Component {
     const source = "&source=en";
     const target = "&target=fr";
     const format = "&format=text";
-    fetch(
-      "" + baseURL + key + q + source + target + format + "",
-      {
-        method: "POST"
-      }
-    )
+    fetch("" + baseURL + key + q + source + target + format + "", {
+      method: "POST"
+    })
       .then(response => response.json())
       .then(responseJson => {
-        //console.log(responseJson);
-        this.setState(oldState => {
-          return {
-            ...oldState,
-            translatedData: responseJson
-          };
-        }
-          , () => {
+        this.setState(
+          oldState => {
+            return {
+              ...oldState,
+              translatedData: responseJson
+            };
+          },
+          () => {
             this.associateWordsHandler();
-          });
+          }
+        );
       })
       .catch(error => {
         console.error(error);
@@ -129,30 +126,30 @@ export default class App extends Component {
 
   associateWordsHandler = () => {
     // Set english words for integration
-    englishWords = [...this.state.analysedImageData.responses[0].labelAnnotations];
+    englishWords = [
+      ...this.state.analysedImageData.responses[0].labelAnnotations
+    ];
     englishWords = englishWords.map((item, index) => {
-      return item.description
+      return item.description;
     });
-    // console.log("englishWords: ", englishWords)
     // Set translated words for integration
-    translatedWords = this.state.translatedData.data.translations[0].translatedText.split(",");
-    // console.log("translated words : ", translatedWords)
+    translatedWords = this.state.translatedData.data.translations[0].translatedText.split(
+      ","
+    );
     // Integrate the association of english and translated text
     integratedWordsList = englishWords.map((item, index) => {
       return {
-        "english": item,
-        "translated": translatedWords[index]
-      }
+        english: item,
+        translated: translatedWords[index]
+      };
     });
-    // console.log("integratedWordsList: ", integratedWordsList)
-    this.setState((oldState) => {
+    this.setState(oldState => {
       return {
         ...oldState,
         wordAssociationArray: integratedWordsList
-      }
+      };
     });
   };
-
 
   returnStateToConsoleHandler = () => {
     if (this.state.analysedImageData.responses) {
@@ -162,37 +159,19 @@ export default class App extends Component {
   };
 
   render() {
-    // const instructions = Platform.select({
-    //   ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-    //   android:
-    //     "Double tap R on your keyboard to reload,\n" +
-    //     "Shake or press menu button for dev menu"
-    // });
 
     let words = null;
     if (this.state.wordAssociationArray.length > 0) {
-      //console.log("wordAssociationArray has objects: ", this.state.wordAssociationArray);
-
       words = [...this.state.wordAssociationArray].map((pair, index) => {
-        //console.log("pair - english: ", pair.english);
-        //console.log("pair - translated: ", pair.translated);
         return (
           <View key={index}>
-            <Text style={styles.text}>{pair.english} : {pair.translated}</Text>
+            <Text style={styles.text}>
+              {pair.english} : {pair.translated}
+            </Text>
           </View>
         );
       });
-
-      // words = this.state.analysedImageData.responses[0].labelAnnotations.map(
-      //   (item, index) => {
-      //     if (item.score > 0.85) {
-      //       // console.log("confident")
-      //       return <Text key={index} style={styles.text}>{item.description}</Text>;
-      //     } // else { console.log("not confident: ", item.score) }
-
-      //   }
-      // );
-    };
+    }
 
     let image = null;
     if (this.state.pickedImage.uri) {
@@ -204,15 +183,45 @@ export default class App extends Component {
       );
     }
 
+    let welcome = null;
+    if (this.state.showWelcome) {
+      welcome = (
+        <View>
+          <Text style={styles.welcome}>Welcome to Language-Link!</Text>
+          <Text style={styles.instructions}>
+            To get started, take a photo of something in your environment.
+          </Text>
+        </View>
+      );
+    }
+
+    let button = null;
+    if(this.state.showButton){
+      let titleText = "Take photo";
+      if(!this.state.showWelcome){
+        titleText = "Take another photo"
+      }
+      button = (
+        <View>
+          <Button title={titleText} onPress={this.pickImageHandler} />
+        </View>
+      );
+    }
+
+    let loading = null;
+    if(this.state.loading){
+      loading = (
+        <View>
+          <Text>Loading...</Text>
+        </View>
+      );
+    }
+
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to Language-Link!</Text>
-        <Text style={styles.instructions}>
-          To get started, take a photo of something in your environment.
-          </Text>
-        {/* <Text style={styles.instructions}>{instructions}</Text> */}
-        <Button title="Take photo" onPress={this.pickImageHandler} />
-        {/* <Button title="Print current state to the console" onPress={this.returnStateToConsoleHandler} /> */}
+      {welcome}
+      {button}
+      {loading}
         <View style={styles.results}>
           {words}
           {image}
