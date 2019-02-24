@@ -6,7 +6,8 @@ import {
   View,
   Button,
   Image,
-  ScrollView
+  ScrollView,
+  Picker
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 
@@ -15,10 +16,13 @@ export default class App extends Component {
     showWelcome: true,
     showButton: true,
     loading: false,
+    showPickLanguage: true,
+    selectedLanguage: "en",
     pickedImage: {},
     analysedImageData: [],
     translatedData: [],
-    wordAssociationArray: []
+    wordAssociationArray: [],
+    availableLanguagesArray: ["en", "ru"]
   };
 
   pickImageHandler = () => {
@@ -38,13 +42,33 @@ export default class App extends Component {
             };
           });
           this.processImageHandler(res.data);
-          console.log(
-            "base64 encode has been added to state: " +
-              this.state.pickedImage.base64
-          );
+          // console.log(
+          //   "base64 encode has been added to state: " +
+          //     this.state.pickedImage.base64
+          // );
         }
       }
     );
+    this.toggleWelcomeScreen();
+    this.toggleLoadingState();
+  };
+
+  toggleWelcomeScreen = () => {
+    this.setState(oldState => {
+      return {
+        ...oldState,
+        showWelcome: !this.state.showWelcome
+      };
+    });
+  };
+
+  toggleLoadingState = () => {
+    this.setState(oldState => {
+      return {
+        ...oldState,
+        loading: !this.state.loading
+      };
+    });
   };
 
   processImageHandler = base64EncodedImage => {
@@ -73,7 +97,7 @@ export default class App extends Component {
     )
       .then(response => response.json())
       .then(responseJson => {
-        console.log(responseJson);
+        // console.log(responseJson);
         this.setState(oldState => {
           return {
             ...oldState,
@@ -100,7 +124,7 @@ export default class App extends Component {
     const key = "?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw";
     const q = "&q=" + wordsList;
     const source = "&source=en";
-    const target = "&target=fr";
+    const target = "&target=" + this.state.selectedLanguage;
     const format = "&format=text";
     fetch("" + baseURL + key + q + source + target + format + "", {
       method: "POST"
@@ -149,6 +173,7 @@ export default class App extends Component {
         wordAssociationArray: integratedWordsList
       };
     });
+    this.toggleLoadingState();
   };
 
   returnStateToConsoleHandler = () => {
@@ -159,12 +184,11 @@ export default class App extends Component {
   };
 
   render() {
-
     let words = null;
-    if (this.state.wordAssociationArray.length > 0) {
+    if (this.state.wordAssociationArray.length > 0 && !this.state.loading) {
       words = [...this.state.wordAssociationArray].map((pair, index) => {
         return (
-          <View key={index}>
+          <View key={index} style={styles.textContainer}>
             <Text style={styles.text}>
               {pair.english} : {pair.translated}
             </Text>
@@ -174,7 +198,7 @@ export default class App extends Component {
     }
 
     let image = null;
-    if (this.state.pickedImage.uri) {
+    if (this.state.pickedImage.uri && !this.state.loading) {
       image = (
         <Image
           style={styles.image}
@@ -195,21 +219,46 @@ export default class App extends Component {
       );
     }
 
+    let pickLanguage = null;
+    if (this.state.showPickLanguage && !this.state.loading) {
+      pickLanguage = (
+        <View style={styles.pickLanguageContainer}>
+          <Text style={styles.pickLanguageText}>Pick your target language for translation</Text>
+          <Picker
+            selectedValue={this.state.selectedLanguage}
+            style={styles.picker}
+            onValueChange={(itemValue, itemIndex) =>
+              this.setState({ selectedLanguage: itemValue })
+            }
+          >
+            <Picker.Item label="French" value="fr" />
+            <Picker.Item label="German" value="de" />
+            <Picker.Item label="Spanish" value="es" />
+            <Picker.Item label="Norwegian" value="no" />
+            <Picker.Item label="Samoan" value="sm" />
+            <Picker.Item label="Hindi" value="hi" />
+            <Picker.Item label="Maori" value="mi" />
+            <Picker.Item label="Russian" value="ru" />
+          </Picker>
+        </View>
+      );
+    }
+
     let button = null;
-    if(this.state.showButton){
-      let titleText = "Take photo";
-      if(!this.state.showWelcome){
-        titleText = "Take another photo"
+    if (this.state.showButton && !this.state.loading) {
+      let titleText = "Take photo to translate";
+      if (!this.state.showWelcome) {
+        titleText = "Take and translate another photo";
       }
       button = (
-        <View>
+        <View style={styles.buttonContainer}>
           <Button title={titleText} onPress={this.pickImageHandler} />
         </View>
       );
     }
 
     let loading = null;
-    if(this.state.loading){
+    if (this.state.loading) {
       loading = (
         <View>
           <Text>Loading...</Text>
@@ -219,9 +268,10 @@ export default class App extends Component {
 
     return (
       <View style={styles.container}>
-      {welcome}
-      {button}
-      {loading}
+        {welcome}
+        {pickLanguage}
+        {button}
+        {loading}
         <View style={styles.results}>
           {words}
           {image}
@@ -238,10 +288,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#F5FCFF"
   },
+  textContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F5FCFF",
+    marginBottom: 10
+  },
   welcome: {
     fontSize: 20,
     textAlign: "center",
-    margin: 10
+    margin: 10,
+    marginTop: 45
+    
   },
   instructions: {
     textAlign: "center",
@@ -260,5 +318,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: "100%",
     height: 500
+  },
+  buttonContainer: { 
+    marginBottom: 10
+  },
+  pickLanguageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
+  picker: {
+    width: "60%",
+    margin: 5
+  },
+  pickLanguageText: {
+    width: "100%",
+    fontSize: 15,
+    color: "black",
+    textAlign: "center"
   }
 });
