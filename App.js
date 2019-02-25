@@ -291,14 +291,16 @@ export default class App extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        {welcome}
-        {pickLanguage}
-        {button}
-        {loading}
-        <View style={styles.results}>
-          {words}
-          {image}
+      <View style={styles.containerBackground}>
+        <View style={styles.container}>
+          {welcome}
+          {pickLanguage}
+          {button}
+          {loading}
+          <View style={styles.results}>
+            {words}
+            {image}
+          </View>
         </View>
       </View>
     );
@@ -311,7 +313,13 @@ const styles = StyleSheet.create({
     height: "auto",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF"
+    backgroundColor: "#F5FCFF",
+    borderColor: "#000000",
+    borderWidth: 1,
+    borderRadius: 5
+  },
+  containerBackground: {
+    backgroundColor: "#000000"
   },
   textContainer: {
     justifyContent: "center",
@@ -360,7 +368,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
-    fontFamily: "Roboto"
+    fontFamily: "Roboto",
+    // backgroundColor: "#fff",
+    // borderColor: "#fff",
+    // borderWidth: 2,
+    marginBottom: 5
   },
   picker: {
     width: 300,
