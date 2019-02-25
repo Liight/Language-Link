@@ -27,7 +27,9 @@ export default class App extends Component {
     if(!this.state.loading){
       this.toggleLoadingState();
     }
-    this.toggleWelcomeScreen();
+    if(this.state.showWelcome){
+      this.toggleWelcomeScreen();
+    }
     ImagePicker.launchCamera(
       {
         title: "Aim at the thing",
@@ -322,13 +324,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10,
     marginTop: 45,
-    color: "#333333"
+    color: "#333333",
+    fontFamily: "Roboto"
   },
   instructions: {
     textAlign: "center",
     color: "#333333",
     padding: 20,
-    marginBottom: 5
+    marginBottom: 5,
+    fontFamily: "Roboto",
+    fontSize: 15
   },
   image: {
     flex:1,
@@ -337,12 +342,16 @@ const styles = StyleSheet.create({
     margin: 5
   },
   text: {
-    textAlign: "center"
+    textAlign: "center",
+    fontFamily: "Roboto",
+    fontSize: 18
   },
   results: {
     textAlign: "center",
     width: "100%",
-    height: 500
+    height: 500,
+    fontFamily: "Roboto",
+    fontSize: 18
   },
   buttonContainer: { 
     marginBottom: 10
@@ -351,10 +360,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
+    fontFamily: "Roboto"
   },
   picker: {
     width: 300,
-    margin: 5
+    margin: 5,
+    fontFamily: "Roboto"
   },
   pickLanguageText: {
     width: "100%",
