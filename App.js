@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import {
-  Platform,
   StyleSheet,
   Text,
   View,
   Button,
   Image,
-  ScrollView,
   Picker
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
@@ -17,23 +15,33 @@ export default class App extends Component {
     showButton: true,
     loading: false,
     showPickLanguage: true,
-    selectedLanguage: "en",
+    selectedLanguage: "",
+    enablePhotoButton: false,
     pickedImage: {},
     analysedImageData: [],
     translatedData: [],
-    wordAssociationArray: [],
-    availableLanguagesArray: ["en", "ru"]
+    wordAssociationArray: []
   };
 
   pickImageHandler = () => {
+    if(!this.state.loading){
+      this.toggleLoadingState();
+    }
+    this.toggleWelcomeScreen();
     ImagePicker.launchCamera(
       {
-        title: "Aim at the thing"
+        title: "Aim at the thing",
+        quality: 0.5
       },
       res => {
         if (res.didCancel) {
           console.log("User cancelled");
+          if(this.state.loading){
+            this.toggleLoadingState();
+          }
+          this.toggleWelcomeScreen();
         } else if (res.error) {
+          
         } else {
           this.setState(oldState => {
             return {
@@ -49,8 +57,9 @@ export default class App extends Component {
         }
       }
     );
-    this.toggleWelcomeScreen();
-    this.toggleLoadingState();
+    
+
+    
   };
 
   toggleWelcomeScreen = () => {
@@ -72,6 +81,7 @@ export default class App extends Component {
   };
 
   processImageHandler = base64EncodedImage => {
+    
     console.log("process image started");
     fetch(
       "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw",
@@ -131,6 +141,7 @@ export default class App extends Component {
     })
       .then(response => response.json())
       .then(responseJson => {
+        console.log(responseJson)
         this.setState(
           oldState => {
             return {
@@ -139,6 +150,13 @@ export default class App extends Component {
             };
           },
           () => {
+            if(responseJson.data === undefined){
+              console.log("undefined response object: ", responseJson)
+              alert("Something went wrong, please try again");
+              this.toggleWelcomeScreen();
+              this.toggleLoadingState();
+              return;
+            }
             this.associateWordsHandler();
           }
         );
@@ -184,6 +202,7 @@ export default class App extends Component {
   };
 
   render() {
+
     let words = null;
     if (this.state.wordAssociationArray.length > 0 && !this.state.loading) {
       words = [...this.state.wordAssociationArray].map((pair, index) => {
@@ -195,7 +214,7 @@ export default class App extends Component {
           </View>
         );
       });
-    }
+    };
 
     let image = null;
     if (this.state.pickedImage.uri && !this.state.loading) {
@@ -213,7 +232,7 @@ export default class App extends Component {
         <View>
           <Text style={styles.welcome}>Welcome to Language-Link!</Text>
           <Text style={styles.instructions}>
-            To get started, take a photo of something in your environment.
+            To get started, pick a language and take a photo of something in your environment.
           </Text>
         </View>
       );
@@ -223,14 +242,17 @@ export default class App extends Component {
     if (this.state.showPickLanguage && !this.state.loading) {
       pickLanguage = (
         <View style={styles.pickLanguageContainer}>
-          <Text style={styles.pickLanguageText}>Pick your target language for translation</Text>
           <Picker
             selectedValue={this.state.selectedLanguage}
             style={styles.picker}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({ selectedLanguage: itemValue })
-            }
+            onValueChange={(itemValue, itemIndex) => {
+              if(itemValue === "unselectable"){
+                return;
+              };
+              this.setState(oldState => { return { ...oldState, selectedLanguage: itemValue, enablePhotoButton: true } } );
+            }}
           >
+            <Picker.Item label="Pick a translation language" value="unselectable"/>
             <Picker.Item label="French" value="fr" />
             <Picker.Item label="German" value="de" />
             <Picker.Item label="Spanish" value="es" />
@@ -246,13 +268,13 @@ export default class App extends Component {
 
     let button = null;
     if (this.state.showButton && !this.state.loading) {
-      let titleText = "Take photo to translate";
+      let titleText = "Take photo to translate objects";
       if (!this.state.showWelcome) {
-        titleText = "Take and translate another photo";
+        titleText = "Take another photo";
       }
       button = (
         <View style={styles.buttonContainer}>
-          <Button title={titleText} onPress={this.pickImageHandler} />
+          <Button title={titleText} onPress={this.pickImageHandler} disabled={!this.state.enablePhotoButton}/>
         </View>
       );
     }
@@ -260,7 +282,7 @@ export default class App extends Component {
     let loading = null;
     if (this.state.loading) {
       loading = (
-        <View>
+        <View style={styles.loading}>
           <Text>Loading...</Text>
         </View>
       );
@@ -283,7 +305,8 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    width: "100%",
+    height: "auto",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF"
@@ -298,18 +321,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
     margin: 10,
-    marginTop: 45
-    
+    marginTop: 45,
+    color: "#333333"
   },
   instructions: {
     textAlign: "center",
     color: "#333333",
+    padding: 20,
     marginBottom: 5
   },
   image: {
-    flex: 1,
+    flex:1,
     borderColor: "black",
-    borderWidth: 1
+    borderWidth: 1,
+    margin: 5
   },
   text: {
     textAlign: "center"
@@ -328,7 +353,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   picker: {
-    width: "60%",
+    width: 300,
     margin: 5
   },
   pickLanguageText: {
@@ -336,5 +361,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: "black",
     textAlign: "center"
+  },
+  loading: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
