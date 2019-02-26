@@ -8,6 +8,7 @@ import {
   Picker
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
+import Table from './src/components/table/table';
 
 export default class App extends Component {
   state = {
@@ -24,10 +25,10 @@ export default class App extends Component {
   };
 
   pickImageHandler = () => {
-    if(!this.state.loading){
+    if (!this.state.loading) {
       this.toggleLoadingState();
     }
-    if(this.state.showWelcome){
+    if (this.state.showWelcome) {
       this.toggleWelcomeScreen();
     }
     ImagePicker.launchCamera(
@@ -38,12 +39,12 @@ export default class App extends Component {
       res => {
         if (res.didCancel) {
           console.log("User cancelled");
-          if(this.state.loading){
+          if (this.state.loading) {
             this.toggleLoadingState();
           }
           this.toggleWelcomeScreen();
         } else if (res.error) {
-          
+
         } else {
           this.setState(oldState => {
             return {
@@ -59,9 +60,6 @@ export default class App extends Component {
         }
       }
     );
-    
-
-    
   };
 
   toggleWelcomeScreen = () => {
@@ -83,7 +81,7 @@ export default class App extends Component {
   };
 
   processImageHandler = base64EncodedImage => {
-    
+
     console.log("process image started");
     fetch(
       "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw",
@@ -152,7 +150,7 @@ export default class App extends Component {
             };
           },
           () => {
-            if(responseJson.data === undefined){
+            if (responseJson.data === undefined) {
               console.log("undefined response object: ", responseJson)
               alert("Something went wrong, please try again");
               this.toggleWelcomeScreen();
@@ -203,20 +201,30 @@ export default class App extends Component {
     console.log(this.state.pickedImage.uri);
   };
 
+  getWordAssociationArrayHandler = () => {
+    waa = [...this.state.wordAssociationArray];
+    return waa;
+  }
+
   render() {
 
     let words = null;
     if (this.state.wordAssociationArray.length > 0 && !this.state.loading) {
-      words = [...this.state.wordAssociationArray].map((pair, index) => {
-        return (
-          <View key={index} style={styles.textContainer}>
-            <Text style={styles.text}>
-              {pair.english} : {pair.translated}
-            </Text>
-          </View>
-        );
-      });
+        words = <Table wordsAndTranslations={this.getWordAssociationArrayHandler()}/>
     };
+
+    // let words = null;
+    // if (this.state.wordAssociationArray.length > 0 && !this.state.loading) {
+    //   words = [...this.state.wordAssociationArray].map((pair, index) => {
+    //     return (
+    //       <View key={index} style={styles.textContainer}>
+    //         <Text style={styles.text}>
+    //           {pair.english} : {pair.translated}
+    //         </Text>
+    //       </View>
+    //     );
+    //   });
+    // };
 
     let image = null;
     if (this.state.pickedImage.uri && !this.state.loading) {
@@ -248,13 +256,13 @@ export default class App extends Component {
             selectedValue={this.state.selectedLanguage}
             style={styles.picker}
             onValueChange={(itemValue, itemIndex) => {
-              if(itemValue === "unselectable"){
+              if (itemValue === "unselectable") {
                 return;
               };
-              this.setState(oldState => { return { ...oldState, selectedLanguage: itemValue, enablePhotoButton: true } } );
+              this.setState(oldState => { return { ...oldState, selectedLanguage: itemValue, enablePhotoButton: true } });
             }}
           >
-            <Picker.Item label="Pick a translation language" value="unselectable"/>
+            <Picker.Item label="Pick a translation language" value="unselectable" />
             <Picker.Item label="French" value="fr" />
             <Picker.Item label="German" value="de" />
             <Picker.Item label="Spanish" value="es" />
@@ -268,6 +276,8 @@ export default class App extends Component {
       );
     }
 
+
+
     let button = null;
     if (this.state.showButton && !this.state.loading) {
       let titleText = "Take photo to translate objects";
@@ -276,7 +286,7 @@ export default class App extends Component {
       }
       button = (
         <View style={styles.buttonContainer}>
-          <Button title={titleText} onPress={this.pickImageHandler} disabled={!this.state.enablePhotoButton}/>
+          <Button title={titleText} onPress={this.pickImageHandler} disabled={!this.state.enablePhotoButton} />
         </View>
       );
     }
@@ -344,7 +354,7 @@ const styles = StyleSheet.create({
     fontSize: 15
   },
   image: {
-    flex:1,
+    flex: 1,
     borderColor: "black",
     borderWidth: 1,
     margin: 5
@@ -361,7 +371,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontSize: 18
   },
-  buttonContainer: { 
+  buttonContainer: {
     marginBottom: 10
   },
   pickLanguageContainer: {
