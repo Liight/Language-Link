@@ -14,12 +14,12 @@ export default class Table extends Component {
 
   render() {
     const words = this.props.wordsAndTranslations;
-    console.log("iterable table object: " , words);
+    // console.log("iterable table object: " , words);
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         {
             words.map((pair, index) => {
-                console.log(pair);
+                // console.log(pair);
                 return this.renderRow(pair, index);
                 })
         }

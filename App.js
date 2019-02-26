@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     fontSize: 18
   },
   results: {
-    textAlign: "center",
+    // textAlign: "center",
     width: "100%",
     height: 500,
     fontFamily: "Roboto",
