@@ -5,9 +5,9 @@ export default class Table extends Component {
   renderRow(set, indx) {
     return (
       <View style={styles.rows} key={indx}>
-        <View style={[styles.cells, {flex: 5, alignItems: "flex-end"}]}><Text>{set.english}</Text></View>
-        <View style={[styles.cells, {flex: 1, alignItems: "center"}]}><Text>:</Text></View>
-        <View style={[styles.cells, {flex: 5, alignItems: "flex-start"}]}><Text>{set.translated}</Text></View>
+        <View style={[styles.cells, {flex: 5, alignItems: "flex-end"}]}><Text style={styles.text}>{set.english}</Text></View>
+        <View style={[styles.cells, {flex: 1, alignItems: "center"}]}><Text style={styles.text}>:</Text></View>
+        <View style={[styles.cells, {flex: 5, alignItems: "flex-start"}]}><Text style={styles.text}>{set.translated}</Text></View>
       </View>
     );
   }
@@ -37,5 +37,9 @@ const styles = StyleSheet.create({
     },
     cells: {
         alignSelf: "stretch"
+    },
+    text: {
+      fontSize: 20,
+      fontFamily: "Roboto"
     }
 });

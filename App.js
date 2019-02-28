@@ -1,7 +1,14 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Button, Image, Picker } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+} from "react-native";
 import ImagePicker from "react-native-image-picker";
 import Table from "./src/components/table/table";
+import Welcome from "./src/components/welcome/welcome";
+import TranslateOption from "./src/components/translateOption/translateOption";
 
 export default class App extends Component {
   state = {
@@ -184,122 +191,63 @@ export default class App extends Component {
     this.toggleLoadingState();
   };
 
-  returnStateToConsoleHandler = () => {
-    if (this.state.analysedImageData.responses) {
-      console.log(this.state.analysedImageData.responses[0].labelAnnotations);
-    }
-    console.log(this.state.pickedImage.uri);
-  };
-
   getWordAssociationArrayHandler = () => {
     waa = [...this.state.wordAssociationArray];
     return waa;
   };
 
+  updateSelectedLanguageHandler = language => {
+    this.setState(oldState => {
+      return {
+        ...oldState,
+        selectedLanguage: language,
+        enablePhotoButton: true
+      };
+    });
+  };
+
   render() {
-    let words = null;
-    if (this.state.wordAssociationArray.length > 0 && !this.state.loading) {
-      words = (
-        <Table wordsAndTranslations={this.getWordAssociationArrayHandler()} />
-      );
-    }
-
-    let image = null;
-    if (this.state.pickedImage.uri && !this.state.loading) {
-      image = (
-        <Image
-          style={styles.image}
-          source={{ uri: this.state.pickedImage.uri }}
-        />
-      );
-    }
-
-    let welcome = null;
-    if (this.state.showWelcome) {
-      welcome = (
-        <View>
-          <Text style={styles.welcome}>Welcome to Language-Link!</Text>
-          <Text style={styles.instructions}>
-            To get started, pick a language and take a photo of something in
-            your environment.
-          </Text>
-        </View>
-      );
-    }
-
-    let pickLanguage = null;
-    if (this.state.showPickLanguage && !this.state.loading) {
-      pickLanguage = (
-        <View style={styles.pickLanguageContainer}>
-          <Picker
-            selectedValue={this.state.selectedLanguage}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) => {
-              if (itemValue === "unselectable") {
-                return;
-              }
-              this.setState(oldState => {
-                return {
-                  ...oldState,
-                  selectedLanguage: itemValue,
-                  enablePhotoButton: true
-                };
-              });
-            }}
-          >
-            <Picker.Item
-              label="Pick a translation language"
-              value="unselectable"
-            />
-            <Picker.Item label="French" value="fr" />
-            <Picker.Item label="German" value="de" />
-            <Picker.Item label="Spanish" value="es" />
-            <Picker.Item label="Norwegian" value="no" />
-            <Picker.Item label="Samoan" value="sm" />
-            <Picker.Item label="Hindi" value="hi" />
-            <Picker.Item label="Maori" value="mi" />
-            <Picker.Item label="Russian" value="ru" />
-          </Picker>
-        </View>
-      );
-    }
-
-    let button = null;
-    if (this.state.showButton && !this.state.loading) {
-      let titleText = "Take photo to translate objects";
-      if (!this.state.showWelcome) {
-        titleText = "Take another photo";
-      }
-      button = (
-        <View style={styles.buttonContainer}>
-          <Button
-            title={titleText}
-            onPress={this.pickImageHandler}
-            disabled={!this.state.enablePhotoButton}
-          />
-        </View>
-      );
-    }
-
     let loading = null;
     if (this.state.loading) {
       loading = (
         <View style={styles.loading}>
-          <Text>Loading...</Text>
+          <Text style={styles.loadingText}>Loading...</Text>
         </View>
       );
     }
+    this.state.showPickLanguage && !this.state.loading;
 
     return (
       <View style={styles.containerBackground}>
         <View style={styles.container}>
-          {welcome}
-          {pickLanguage}
-          {button}
+          {this.state.showWelcome ? <Welcome /> : null}
+          {this.state.showPickLanguage && !this.state.loading ? (
+            <TranslateOption
+              updateLanguage={this.updateSelectedLanguageHandler}
+              selectedLanguage={this.state.selectedLanguage}
+              enablePhotoButton={this.state.enablePhotoButton}
+              pressed={this.pickImageHandler}
+              showButton={this.state.showButton}
+              loading={this.state.loading}
+              showWelcome={this.state.showWelcome}
+            />
+          ) : null}
           {loading}
-          <View style={styles.results}>
-            {words}
-            {image}
+          <View style={[styles.results, {flex: this.state.showWelcome ? 1 : 0}]}>
+            {this.state.wordAssociationArray.length > 0 &&
+            !this.state.loading ? (
+              <Table
+                wordsAndTranslations={this.getWordAssociationArrayHandler()}
+              />
+            ) : null}
+
+            {this.state.pickedImage.uri && !this.state.loading ? (
+              <Image
+                style={styles.image}
+                source={{ uri: this.state.pickedImage.uri }}
+              />
+            ) : null}
+
           </View>
         </View>
       </View>
@@ -309,8 +257,9 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    width: "100%",
-    height: "auto",
+    flex: 1,
+    // width: "100%",
+    // height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF",
@@ -319,6 +268,7 @@ const styles = StyleSheet.create({
     borderRadius: 5
   },
   containerBackground: {
+    flex: 1,
     backgroundColor: "#000000"
   },
   textContainer: {
@@ -327,24 +277,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5FCFF",
     marginBottom: 10
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10,
-    marginTop: 45,
-    color: "#333333",
-    fontFamily: "Roboto"
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    padding: 20,
-    marginBottom: 5,
-    fontFamily: "Roboto",
-    fontSize: 15
-  },
   image: {
     flex: 1,
+    height: "100%",
+    justifyContent: "flex-end",
     borderColor: "black",
     borderWidth: 1,
     margin: 5
@@ -357,35 +293,18 @@ const styles = StyleSheet.create({
   results: {
     textAlign: "center",
     width: "100%",
-    height: 500,
+    height: "60%",
     fontFamily: "Roboto",
     fontSize: 18
-  },
-  buttonContainer: {
-    marginBottom: 10
-  },
-  pickLanguageContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-    fontFamily: "Roboto",
-    marginBottom: 5
-  },
-  picker: {
-    width: 300,
-    margin: 5,
-    fontFamily: "Roboto"
-  },
-  pickLanguageText: {
-    width: "100%",
-    fontSize: 15,
-    color: "black",
-    textAlign: "center"
   },
   loading: {
     width: "100%",
     height: "100%",
     justifyContent: "center",
     alignItems: "center"
+  },
+  loadingText: {
+    fontSize: 50,
+    fontFamily: "Roboto"
   }
 });
