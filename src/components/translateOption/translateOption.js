@@ -6,13 +6,17 @@ const TranslateOption = props => {
 
   return (
     <View>
-      <View style={[styles.pickLanguageContainer, {
-          borderColor: props.enablePhotoButton ? "#4BB543" : "#FF7F50"
-      }]}>
+      <View
+        style={[
+          styles.pickLanguageContainer,
+          {
+            borderColor: props.enablePhotoButton ? "#4BB543" : "#4cb6fe"
+          }
+        ]}
+      >
         <Picker
           selectedValue={props.selectedLanguage}
           style={styles.picker}
-          // mode="dropdown"
           onValueChange={(itemValue, itemIndex) => {
             if (itemValue === "unselectable") {
               return;
@@ -36,23 +40,25 @@ const TranslateOption = props => {
       </View>
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-            activeOpacity={0.5}
-            style={[
+          activeOpacity={0.5}
+          style={[
             styles.customBtnBG,
             {
-                backgroundColor: props.enablePhotoButton ? "#FF7F50" : "#e4e4e4",
-                opacity: props.enablePhotoButton ? 1.0 : 0.3,
-                borderColor: props.enablePhotoButton ? "#FF7F50" : "#a4a4a4",
+              backgroundColor: props.enablePhotoButton
+                ? "#29abe2"
+                : "#e4e4e4",
+              opacity: props.enablePhotoButton ? 1.0 : 0.4,
+              borderColor: props.enablePhotoButton ? "#29abe2" : "#a4a4a4"
             }
-            ]}
-            onPress={props.pressed}
-            disabled={!props.enablePhotoButton}
+          ]}
+          onPress={props.pressed}
+          disabled={!props.enablePhotoButton}
         >
-            <Text style={styles.customBtnText}>
+          <Text style={styles.customBtnText}>
             {props.enablePhotoButton
-                ? "Take a photo to translate objects"
-                : "Please pick a language"}
-            </Text>
+              ? "Take a photo to translate objects"
+              : "Please pick a language"}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -64,11 +70,15 @@ export default TranslateOption;
 const styles = StyleSheet.create({
   picker: {
     width: 300,
-    margin: 5,
-    padding: 20,
+    margin: 0,
+    padding: 0,
     fontFamily: "Roboto",
     fontSize: 20,
-    transform: [{ scaleX: 1.0 }, { scaleY: 1.0 }]
+    backgroundColor: "#F5F5F5",
+    borderRadius: 50,
+    textAlign: "center",
+    transform: [{ scaleX: 1.0 }, { scaleY: 1.0 }],
+    borderRadius: 50
   },
   pickLanguageContainer: {
     justifyContent: "center",
@@ -80,12 +90,12 @@ const styles = StyleSheet.create({
     marginRight: "auto",
     fontSize: 20,
     borderWidth: 3,
-    borderColor: "#FF7F50",
-    borderRadius: 50
+    borderColor: "#F5F5F5",
+    borderRadius: 0
   },
   pickLanguageText: {
     width: "100%",
-    fontSize: 15,
+    fontSize: 22,
     color: "black",
     textAlign: "center"
   },
@@ -99,13 +109,13 @@ const styles = StyleSheet.create({
   customBtnBG: {
     color: "#333333",
     textTransform: "uppercase",
-    backgroundColor: "#FF7F50",
+    // backgroundColor: "#FF7F50",
     padding: 15,
     borderRadius: 50,
     width: "100%",
     opacity: 0.8,
-    borderColor: "#a4a4a4",
-    borderWidth: 3
+    // borderColor: "#a4a4a4",
+    borderWidth: 3,
   },
   customBtnText: {
     fontFamily: "Roboto",

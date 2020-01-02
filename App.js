@@ -33,7 +33,7 @@ export default class App extends Component {
     }
     ImagePicker.launchCamera(
       {
-        title: "Aim at the thing",
+        title: "Snap the object(s) to be translated",
         quality: 0.5
       },
       res => {
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     // height: "100%",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F5FCFF",
+    backgroundColor: "#e9e6e8",
     borderColor: "#000000",
     borderWidth: 1,
     borderRadius: 5
