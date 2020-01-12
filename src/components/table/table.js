@@ -16,7 +16,7 @@ export default class Table extends Component {
     const words = this.props.wordsAndTranslations;
     // console.log("iterable table object: " , words);
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View style={[{ flex: 0, alignItems: "center", justifyContent: "center" }, styles.table]}>
         {
             words.map((pair, index) => {
                 // console.log(pair);
@@ -30,16 +30,24 @@ export default class Table extends Component {
 
 const styles = StyleSheet.create({
     rows: {
-        flex: 1, 
+        // flex: 1, 
         alignSelf: "stretch", 
         flexDirection: "row",
-        justifyContent: "center"
+        justifyContent: "center",
+        overflow: "hidden",
+        height: "auto",
+        width: "100%"
     },
     cells: {
-        alignSelf: "stretch"
+      // flex: 1,
+        alignSelf: "stretch",
+        // height: "100%"
     },
     text: {
       fontSize: 20,
       fontFamily: "Roboto"
+    },
+    table: {
+      // overflow: "scroll"
     }
 });

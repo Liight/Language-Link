@@ -9,6 +9,7 @@ import ImagePicker from "react-native-image-picker";
 import Table from "./src/components/table/table";
 import Welcome from "./src/components/welcome/welcome";
 import TranslateOption from "./src/components/translateOption/translateOption";
+import { gvApiKey } from "./src/secret/secret";
 
 export default class App extends Component {
   state = {
@@ -128,7 +129,7 @@ export default class App extends Component {
     wordsList = wordsList.join();
     // API Call
     const baseURL = "https://translation.googleapis.com/language/translate/v2";
-    const key = "?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw";
+    const key = gvApiKey;
     const q = "&q=" + wordsList;
     const source = "&source=en";
     const target = "&target=" + this.state.selectedLanguage;
@@ -236,6 +237,7 @@ export default class App extends Component {
           <View style={[styles.results, {flex: this.state.showWelcome ? 1 : 0}]}>
             {this.state.wordAssociationArray.length > 0 &&
             !this.state.loading ? (
+              
               <Table
                 wordsAndTranslations={this.getWordAssociationArrayHandler()}
               />
@@ -259,13 +261,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // width: "100%",
-    // height: "100%",
+    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#e9e6e8",
     borderColor: "#000000",
     borderWidth: 1,
-    borderRadius: 5
+    borderRadius: 5,
+    overflow: "scroll"
   },
   containerBackground: {
     flex: 1,
@@ -278,7 +281,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   image: {
-    flex: 1,
+    // flex: 1,
     height: "100%",
     justifyContent: "flex-end",
     borderColor: "black",

@@ -4,9 +4,9 @@ import { View, Text, StyleSheet } from "react-native";
 const welcome = props => {
   return (
     <View style={styles.welcomeContainer}>
-      <Text style={styles.welcome}>Welcome to Language-Link!</Text>
+      <Text style={styles.welcome}>Language-Link!</Text>
       <Text style={styles.instructions}>
-        To get started, pick a language and take a photo of something in your
+        To get started, <Text style={styles.bold}>pick a language</Text> and <Text style={styles.bold}>take a photo</Text> of something in your
         environment.
       </Text>
     </View>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 32,
     textAlign: "center",
-    margin: 10,
+    marginTop: 10,
     // marginTop: 45,
     paddingTop: 50,
     color: "#333333", 
@@ -40,5 +40,8 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontFamily: "Roboto",
     fontSize: 22
+  },
+  bold: {
+    fontWeight: "bold"
   }
 });
