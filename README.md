@@ -13,8 +13,6 @@ This is a simple React Native demo project using what I've learned with React Na
 - Redux-Thunk
 - Google Cloud Translate
 - Google Cloud Vision
-- Webpack
-- Babel
 - Pure JavaScript
 - HTML5
 - CSS3 w/ Mobile First Responsive Design
@@ -24,7 +22,7 @@ This is a simple React Native demo project using what I've learned with React Na
 
 <pre>npm install</pre>
 then
-<pre>npm start</pre>
+<pre>react-native start</pre>
 
 #### License
 
