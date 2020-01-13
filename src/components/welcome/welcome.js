@@ -18,7 +18,7 @@ export default welcome;
 const styles = StyleSheet.create({
   welcomeContainer: {
     position: "relative",
-    backgroundColor: "#e9e6e8" // new
+    backgroundColor: "#F5F5F5" // new
   },
   welcome: {
     fontSize: 32,
