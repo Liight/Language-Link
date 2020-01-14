@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Image,
+  Scroll
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import Table from "./src/components/table/table";
@@ -259,7 +260,7 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     // width: "100%",
     height: "100%",
     justifyContent: "center",
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
     borderColor: "#000000",
     borderWidth: 1,
     borderRadius: 5,
-    overflow: "scroll"
+    // overflow: "scroll"
   },
   containerBackground: {
     flex: 1,

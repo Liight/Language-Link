@@ -15,7 +15,8 @@ const TranslateOption = props => {
             // padding: 10,
             height: 75,
             width: 325,
-            textAlign: "center"
+            textAlign: "center",
+            marginBottom: 10
           }
         ]}
       >

@@ -5,10 +5,12 @@ const welcome = props => {
   return (
     <View style={styles.welcomeContainer}>
       <Text style={styles.welcome}>Language-Link!</Text>
-      <Text style={styles.instructions}>
-        To get started, <Text style={styles.bold}>pick a language</Text> and <Text style={styles.bold}>take a photo</Text> of something in your
-        environment.
-      </Text>
+      <View style={styles.instructionContainer}>
+        <Text style={styles.newInstructions}>To get started,</Text>
+        <Text style={styles.newInstructions}><Text style={styles.bold}>first pick a language</Text></Text>
+        <Text style={styles.newInstructions}><Text style={styles.bold}>and then take a photo</Text></Text>
+        <Text style={styles.newInstructions}>and this app will translate the objects in the photo into the language of your choice!</Text>
+      </View>
     </View>
   );
 };
@@ -18,12 +20,14 @@ export default welcome;
 const styles = StyleSheet.create({
   welcomeContainer: {
     position: "relative",
-    backgroundColor: "#F5F5F5" // new
+    backgroundColor: "#F5F5F5", // new
+    marginBottom: 20,
   },
   welcome: {
     fontSize: 32,
     textAlign: "center",
     marginTop: 10,
+    marginBottom: 10,
     // marginTop: 45,
     paddingTop: 50,
     color: "#333333", 
@@ -31,13 +35,13 @@ const styles = StyleSheet.create({
     paddingLeft: "20%",
     paddingRight: "20%"
   },
-  instructions: {
+  newInstructions: {
     textAlign: "center",
     color: "#333333",
-    padding: 20,
+    // padding: 20,
     paddingLeft: "20%",
     paddingRight: "20%",
-    marginBottom: 5,
+    // marginBottom: 5,
     fontFamily: "Roboto",
     fontSize: 22
   },
