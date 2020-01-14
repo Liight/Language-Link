@@ -5,7 +5,7 @@ const TranslateOption = props => {
   console.log(props);
 
   return (
-    <View>
+    <View style={styles.wrapper}>
       <View
         style={[
           styles.pickLanguageContainer,
@@ -62,13 +62,14 @@ const TranslateOption = props => {
                 ? "#29abe2"
                 : "#e4e4e4",
               opacity: props.enablePhotoButton ? 1.0 : 0.4,
-              borderColor: props.enablePhotoButton ? "#29abe2" : "#a4a4a4"
+              borderColor: props.enablePhotoButton ? "#29abe2" : "#a4a4a4",
+              
             }
           ]}
           onPress={props.pressed}
           disabled={!props.enablePhotoButton}
         >
-          <Text style={styles.customBtnText}>
+          <Text style={[styles.customBtnText, { color: props.enablePhotoButton ? "#FFFFFF" : "#333333" }]}>
             {props.enablePhotoButton
               ? "Take a photo to translate objects"
               : "Please pick a language"}
@@ -82,6 +83,9 @@ const TranslateOption = props => {
 export default TranslateOption;
 
 const styles = StyleSheet.create({
+  wrapper:{
+    marginTop: 0,
+  },
   picker: {
     width: 300,
     margin: 0,
@@ -131,7 +135,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignContent: "center",
     justifyContent: "center",
-    color: "#333333",
+    // color: "#333333",
     textTransform: "uppercase",
     // backgroundColor: "#FF7F50",
     // padding: 15,

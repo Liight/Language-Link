@@ -9,7 +9,7 @@ const welcome = props => {
         <Text style={styles.newInstructions}>To get started,</Text>
         <Text style={styles.newInstructions}><Text style={styles.bold}>first pick a language</Text></Text>
         <Text style={styles.newInstructions}><Text style={styles.bold}>and then take a photo</Text></Text>
-        <Text style={styles.newInstructions}>and this app will translate the objects in the photo into the language of your choice!</Text>
+        <Text style={styles.newInstructions}>This app will translate the objects in the photo into the language of your choice!</Text>
       </View>
     </View>
   );

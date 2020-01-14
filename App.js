@@ -285,6 +285,7 @@ const styles = StyleSheet.create({
   image: {
     // flex: 1,
     height: "100%",
+    maxHeight: 245,
     justifyContent: "flex-end",
     borderColor: "black",
     borderWidth: 1,
