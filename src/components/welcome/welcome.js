@@ -20,7 +20,7 @@ export default welcome;
 const styles = StyleSheet.create({
   welcomeContainer: {
     position: "relative",
-    backgroundColor: "#F5F5F5", // new
+    backgroundColor: "#F9F9F9", // new
     marginBottom: 20,
   },
   welcome: {

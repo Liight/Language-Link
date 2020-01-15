@@ -84,7 +84,8 @@ export default TranslateOption;
 
 const styles = StyleSheet.create({
   wrapper:{
-    marginTop: 0,
+    marginTop: 20,
+    marginBottom: 0,
   },
   picker: {
     width: 300,

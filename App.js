@@ -4,7 +4,9 @@ import {
   Text,
   View,
   Image,
-  Scroll
+  ScrollView,
+  Dimensions,
+  SafeAreaView
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import Table from "./src/components/table/table";
@@ -209,6 +211,8 @@ export default class App extends Component {
   };
 
   render() {
+    const screenHeight = Dimensions.get('window').height
+
     let loading = null;
     if (this.state.loading) {
       loading = (
@@ -220,8 +224,9 @@ export default class App extends Component {
     this.state.showPickLanguage && !this.state.loading;
 
     return (
-      <View style={styles.containerBackground}>
-        <View style={styles.container}>
+      <SafeAreaView style={[styles.containerBackground, { height: screenHeight}]}>
+        <ScrollView contentContainerStyle={styles.contentContainer}>
+          <View style={{ height: "auto", width: "100%"}}>
           {this.state.showWelcome ? <Welcome /> : null}
           {this.state.showPickLanguage && !this.state.loading ? (
             <TranslateOption
@@ -235,13 +240,14 @@ export default class App extends Component {
             />
           ) : null}
           {loading}
+
           <View style={[styles.results, {flex: this.state.showWelcome ? 1 : 0}]}>
             {this.state.wordAssociationArray.length > 0 &&
             !this.state.loading ? (
-              
-              <Table
-                wordsAndTranslations={this.getWordAssociationArrayHandler()}
-              />
+
+
+              <Table wordsAndTranslations={this.getWordAssociationArrayHandler()}/>
+
             ) : null}
 
             {this.state.pickedImage.uri && !this.state.loading ? (
@@ -252,29 +258,33 @@ export default class App extends Component {
             ) : null}
 
           </View>
-        </View>
-      </View>
+          </View>
+
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
+  contentContainer: {
     // flex: 1,
+    // flexGrow: 1,
+    // flexShrink: 0,
     // width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+    // height: "100%",
+    // justifyContent: "center",
+    // alignItems: "center",
     // backgroundColor: "#e9e6e8",
     backgroundColor: "#FAFAFA",
-    borderColor: "#000000",
-    borderWidth: 1,
-    borderRadius: 5,
-    // overflow: "scroll"
+    // borderColor: "#000000",
+    // borderWidth: 1,
+    // borderRadius: 5,
   },
   containerBackground: {
     flex: 1,
-    backgroundColor: "#000000"
+    // height: "100%",
+    backgroundColor: "#F9F9F9"
   },
   textContainer: {
     justifyContent: "center",
@@ -284,12 +294,16 @@ const styles = StyleSheet.create({
   },
   image: {
     // flex: 1,
-    height: "100%",
-    maxHeight: 245,
-    justifyContent: "flex-end",
+    width: "95%",
+    height: 300,
+    // aspectRatio: 2,
+    // maxHeight: 245,
+    justifyContent: "center",
+    alignItems: "center",
     borderColor: "black",
     borderWidth: 1,
-    margin: 5
+    marginLeft: "2.5%",
+    marginRight: "2.5%"
   },
   text: {
     textAlign: "center",
@@ -299,11 +313,13 @@ const styles = StyleSheet.create({
   results: {
     textAlign: "center",
     width: "100%",
-    height: "60%",
+    height: "auto",
     fontFamily: "Roboto",
-    fontSize: 18
+    fontSize: 18,
+    marginTop: 20,
   },
   loading: {
+    flex: 1, // new
     width: "100%",
     height: "100%",
     justifyContent: "center",
@@ -312,5 +328,5 @@ const styles = StyleSheet.create({
   loadingText: {
     fontSize: 50,
     fontFamily: "Roboto"
-  }
+  },
 });
