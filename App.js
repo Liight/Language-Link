@@ -216,7 +216,7 @@ export default class App extends Component {
     let loading = null;
     if (this.state.loading) {
       loading = (
-        <View style={styles.loading}>
+        <View style={[styles.loading, { height: screenHeight}]}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       );
@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   loading: {
     flex: 1, // new
     width: "100%",
-    height: "100%",
+    // height: "100%",
     justifyContent: "center",
     alignItems: "center"
   },
