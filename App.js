@@ -14,6 +14,8 @@ import Welcome from "./src/components/welcome/welcome";
 import TranslateOption from "./src/components/translateOption/translateOption";
 import { gvApiKey } from "./src/secret/secret";
 
+// import Tts from 'react-native-tts';
+
 export default class App extends Component {
   state = {
     showWelcome: true,
@@ -25,7 +27,8 @@ export default class App extends Component {
     pickedImage: {},
     analysedImageData: [],
     translatedData: [],
-    wordAssociationArray: []
+    wordAssociationArray: [],
+    // translatedAudio: {}
   };
 
   pickImageHandler = () => {
@@ -86,7 +89,7 @@ export default class App extends Component {
   processImageHandler = base64EncodedImage => {
     console.log("process image started");
     fetch(
-      "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyDXe4ULuwFS-NcuXVgqAST6nWwz6S-CxBw",
+      "https://vision.googleapis.com/v1/images:annotate" + gvApiKey,
       {
         method: "POST",
         body: JSON.stringify({
@@ -189,10 +192,14 @@ export default class App extends Component {
     this.setState(oldState => {
       return {
         ...oldState,
-        wordAssociationArray: integratedWordsList
+        wordAssociationArray: integratedWordsList,
+        translatedWords: translatedWords
       };
+    }, ()=>{
+        this.toggleLoadingState();
+        // this.textToSpeechHandler();
     });
-    this.toggleLoadingState();
+   
   };
 
   getWordAssociationArrayHandler = () => {
@@ -210,13 +217,71 @@ export default class App extends Component {
     });
   };
 
+  getTranslatedWordsHandler = () => {
+    const tw = [...this.state.translatedWords];
+    return tw;
+  };
+
+  // textToSpeechHandler = () => {
+  //   const waa = this.getTranslatedWordsHandler();
+  //   console.log('before: '+waa);
+
+  //   fetch(
+  //     "https://texttospeech.googleapis.com/v1/text:synthesize" + gvApiKey,
+  //     {
+  //       method: "POST",
+  //       body: JSON.stringify({
+
+            
+  //             "input": {
+  //               "text": "Android is a mobile operating system developed by Google, based on the Linux kernel and designed primarily for touchscreen mobile devices such as smartphones and tablets."
+  //             },
+  //             "voice": {
+  //               "languageCode": "en-gb",
+  //               "name": "en-GB-Standard-A",
+  //               "ssmlGender": "FEMALE"
+  //             },
+  //             "audioConfig": {
+  //               "audioEncoding": "MP3"
+  //             }
+  //           }
+
+  //         ) // body
+  //     }
+  //   )
+  //     .then(response => response.json())
+  //     .then(responseJson => {
+  //       console.log(responseJson);
+  //       this.setState(oldState => {
+  //         return {
+  //           ...oldState,
+  //           translatedAudio: responseJson.audioContent
+  //         };
+  //       }, () => {
+  //           console.log('audio: ' +(this.state.translatedAudio));
+  //       });
+  //     })
+  //     .catch(error => {
+  //       console.error(error);
+  //     });
+
+  // }
+
+  // textToSpeechHandler = (text) => {
+  //   console.log('text to say : '+text);
+  //   Tts.getInitStatus().then(() => {
+  //     Tts.speak("string are working");
+  //   });
+  // }
+
   render() {
-    const screenHeight = Dimensions.get('window').height
+    
+    const screenHeight = Dimensions.get("window").height;
 
     let loading = null;
     if (this.state.loading) {
       loading = (
-        <View style={[styles.loading, { height: screenHeight}]}>
+        <View style={[styles.loading, { height: screenHeight }]}>
           <Text style={styles.loadingText}>Loading...</Text>
         </View>
       );
@@ -224,42 +289,45 @@ export default class App extends Component {
     this.state.showPickLanguage && !this.state.loading;
 
     return (
-      <SafeAreaView style={[styles.containerBackground, { height: screenHeight}]}>
+      <SafeAreaView
+        style={[styles.containerBackground, { height: screenHeight }]}
+      >
         <ScrollView contentContainerStyle={styles.contentContainer}>
-          <View style={{ height: "auto", width: "100%"}}>
-          {this.state.showWelcome ? <Welcome /> : null}
-          {this.state.showPickLanguage && !this.state.loading ? (
-            <TranslateOption
-              updateLanguage={this.updateSelectedLanguageHandler}
-              selectedLanguage={this.state.selectedLanguage}
-              enablePhotoButton={this.state.enablePhotoButton}
-              pressed={this.pickImageHandler}
-              showButton={this.state.showButton}
-              loading={this.state.loading}
-              showWelcome={this.state.showWelcome}
-            />
-          ) : null}
-          {loading}
-
-          <View style={[styles.results, {flex: this.state.showWelcome ? 1 : 0}]}>
-            {this.state.wordAssociationArray.length > 0 &&
-            !this.state.loading ? (
-
-
-              <Table wordsAndTranslations={this.getWordAssociationArrayHandler()}/>
-
-            ) : null}
-
-            {this.state.pickedImage.uri && !this.state.loading ? (
-              <Image
-                style={styles.image}
-                source={{ uri: this.state.pickedImage.uri }}
+          <View style={{ height: "auto", width: "100%" }}>
+            {this.state.showWelcome ? <Welcome /> : null}
+            {this.state.showPickLanguage && !this.state.loading ? (
+              <TranslateOption
+                updateLanguage={this.updateSelectedLanguageHandler}
+                selectedLanguage={this.state.selectedLanguage}
+                enablePhotoButton={this.state.enablePhotoButton}
+                pressed={this.pickImageHandler}
+                showButton={this.state.showButton}
+                loading={this.state.loading}
+                showWelcome={this.state.showWelcome}
               />
             ) : null}
+            {loading}
 
-          </View>
-          </View>
+            <View
+              style={[styles.results, { flex: this.state.showWelcome ? 1 : 0 }]}
+            >
+              {this.state.wordAssociationArray.length > 0 &&
+              !this.state.loading ? (
+                <Table
+                  wordsAndTranslations={this.getWordAssociationArrayHandler()}
+                  selectedLanguage={this.state.selectedLanguage}
+                  // saySpeech={this.textToSpeechHandler}
+                />
+              ) : null}
 
+              {this.state.pickedImage.uri && !this.state.loading ? (
+                <Image
+                  style={styles.image}
+                  source={{ uri: this.state.pickedImage.uri }}
+                />
+              ) : null}
+            </View>
+          </View>
         </ScrollView>
       </SafeAreaView>
     );
@@ -268,22 +336,10 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   contentContainer: {
-    // flex: 1,
-    // flexGrow: 1,
-    // flexShrink: 0,
-    // width: "100%",
-    // height: "100%",
-    // justifyContent: "center",
-    // alignItems: "center",
-    // backgroundColor: "#e9e6e8",
-    backgroundColor: "#FAFAFA",
-    // borderColor: "#000000",
-    // borderWidth: 1,
-    // borderRadius: 5,
+    backgroundColor: "#FAFAFA"
   },
   containerBackground: {
     flex: 1,
-    // height: "100%",
     backgroundColor: "#F9F9F9"
   },
   textContainer: {
@@ -293,11 +349,8 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   image: {
-    // flex: 1,
     width: "95%",
     height: 300,
-    // aspectRatio: 2,
-    // maxHeight: 245,
     justifyContent: "center",
     alignItems: "center",
     borderColor: "black",
@@ -316,17 +369,16 @@ const styles = StyleSheet.create({
     height: "auto",
     fontFamily: "Roboto",
     fontSize: 18,
-    marginTop: 20,
+    marginTop: 20
   },
   loading: {
-    flex: 1, // new
+    flex: 1,
     width: "100%",
-    // height: "100%",
     justifyContent: "center",
     alignItems: "center"
   },
   loadingText: {
     fontSize: 50,
     fontFamily: "Roboto"
-  },
+  }
 });

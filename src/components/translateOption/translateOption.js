@@ -41,15 +41,15 @@ const TranslateOption = props => {
           <Picker.Item label="Spanish" value="es" />
           <Picker.Item label="Norwegian" value="no" />
           <Picker.Item label="Samoan" value="sm" />
-          <Picker.Item label="Hindi" value="hi" />
+          {/* <Picker.Item label="Hindi" value="hi" /> */}
           <Picker.Item label="Maori" value="mi" />
           <Picker.Item label="Russian" value="ru" />
           <Picker.Item label="Afrikaans" value="af" />
-          <Picker.Item label="Chinese (Simplified) " value="zh" />
-          <Picker.Item label="Japanese" value="ja" />
+          {/* <Picker.Item label="Chinese (Simplified) " value="zh" /> */}
+          {/* <Picker.Item label="Japanese" value="ja" /> */}
           <Picker.Item label="Latin" value="la" />
-          <Picker.Item label="Punjabi" value="pa" />
-          <Picker.Item label="Thai" value="th" />
+          {/* <Picker.Item label="Punjabi" value="pa" /> */}
+          {/* <Picker.Item label="Thai" value="th" /> */}
         </Picker>
       </View>
       <View style={styles.buttonContainer}>

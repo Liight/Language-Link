@@ -1,8 +1,23 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Button } from "react-native";
+import Tts from 'react-native-tts';
 
 export default class Table extends Component {
+
+  saySpeech = (text, sl) => {
+    console.log("text : "+text)
+    Tts.getInitStatus().then(() => {
+      Tts.setDefaultLanguage(sl);
+      Tts.setDefaultRate(0.6);
+      Tts.setDefaultPitch(1.0);
+      Tts.voices().then(voices => console.log(voices));
+      Tts.speak(text);
+      // Tts.stop();
+    }).catch((err) => {console.log(err)});
+  }
+
   renderRow(set, indx) {
+    const button = (set.english.length > 0 && set.translated.length > 0) ? <Button title="Say Aloud" style={styles.button} onPress={() => this.saySpeech(set.translated, this.props.selectedLanguage)} /> : null;
     return (
         <View style={styles.rows} key={indx}>
           <View style={[styles.cells, { alignItems: "center" }]}>
@@ -12,6 +27,7 @@ export default class Table extends Component {
           <View style={[styles.cells, { alignItems: "center" }]}>
             <Text style={styles.text}>{set.translated}</Text>
           </View>
+          {button}
         </View>
     );
   }
@@ -68,5 +84,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     padding: 0,
     textAlign: "center"
+  },
+  button: {
+    width: "80%",
+    color: "orange",
+    padding: 0,
   }
 });
