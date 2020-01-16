@@ -6,7 +6,8 @@
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "android": "react-native run-android",
-    "clean-and-build": "cd android && gradlew clean && cd.. && react-native run-android"
+    "clean-and-build": "cd android && gradlew clean && cd.. && react-native run-android",
+    "clean": "cd android && gradlew clean && cd.."
   },
   "dependencies": {
     "@google-cloud/text-to-speech": "^2.1.2",

@@ -24,7 +24,7 @@ export default class Table extends Component {
         </View>
       </TouchableOpacity>
     );
-    const button = (set.english.length > 0 && set.translated.length > 0) ? <Button title="Say Aloud" style={styles.button} onPress={() => this.saySpeech(set.translated, this.props.selectedLanguage)} /> : null;
+    // const button = (set.english.length > 0 && set.translated.length > 0) ? <Button title="Say Aloud" style={styles.button} onPress={() => this.saySpeech(set.translated, this.props.selectedLanguage)} /> : null;
     return (
         <View style={styles.rows} key={indx}>
           <View style={[styles.cells, { alignItems: "center" }]}>
@@ -45,7 +45,7 @@ export default class Table extends Component {
     return (
       <View
         style={[
-          { flex: 0, flexDirection: "column", alignItems: "center", justifyContent: "center" },
+          { flex: 0, flexDirection: "column", alignItems: "center", justifyContent: "center"},
           styles.table
         ]}
       >
@@ -67,15 +67,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     overflow: "hidden",
-    height: 99,
-    width: "100%",
-    borderTopColor: "#E5E5E5",
-    borderTopWidth: 0.5
+    height: "auto",
+    width: "95%",
+    borderTopColor: "orange",
+    borderTopWidth: 0.5,
+    padding: 10
   },
-  'rows:first-child':{
-    borderBottomColor: "#E5E5E5",
-    borderBottomWidth: 1
-  },
+  // 'rows:first-child':{
+  //   borderBottomColor: "#E5E5E5",
+  //   borderBottomWidth: 1
+  // },
   cells: {
     height: 33
   },
@@ -85,14 +86,16 @@ const styles = StyleSheet.create({
   },
   tableHeadingText: {
     flex: 1, 
-    width: "100%",
+    width: "95%",
     flexDirection: "column",
     // height: "100%",
     justifyContent: "center",
     alignItems: "center",
     fontSize: 24,
     padding: 0,
-    textAlign: "center"
+    textAlign: "center",
+    borderBottomWidth: 0.5,
+    borderBottomColor: "orange"
   },
   button: {
     flexDirection: "column",
@@ -109,8 +112,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "auto",
     height: "auto",
-    paddingLeft: 5,
-    paddingRight: 5,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 5,
+    paddingTop: 5,
     margin: 0,
     borderColor: "orange",
     borderRadius: 20,

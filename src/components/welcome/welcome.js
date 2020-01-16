@@ -1,10 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
+
 
 const welcome = props => {
   return (
     <View style={styles.welcomeContainer}>
-      <Text style={styles.welcome}>Language-Link!</Text>
+      {/* <Text style={styles.welcome}>Language-Link!</Text> */}
+      <Image
+        style={{ width: 200, height: 200 }}
+        source={require('../../assets/LLLogo.png')}
+      />
       <View style={styles.instructionContainer}>
         <Text style={styles.newInstructions}>To get started,</Text>
         <Text style={styles.newInstructions}><Text style={styles.bold}>first pick a language</Text></Text>
@@ -20,8 +25,13 @@ export default welcome;
 const styles = StyleSheet.create({
   welcomeContainer: {
     position: "relative",
+    // flex: 1,
+    flexDirection: "column",
     backgroundColor: "#F9F9F9", // new
     marginBottom: 20,
+    marginTop: 20,
+    alignItems: "center",
+    justifyContent: 'space-evenly'
   },
   welcome: {
     fontSize: 32,

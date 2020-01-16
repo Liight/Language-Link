@@ -295,7 +295,7 @@ export default class App extends Component {
         <ScrollView contentContainerStyle={styles.contentContainer}>
           <View style={{ height: "auto", width: "100%" }}>
             {this.state.showWelcome ? <Welcome /> : null}
-            {this.state.showPickLanguage && !this.state.loading ? (
+            {this.state.showWelcome && this.state.showPickLanguage && !this.state.loading ? (
               <TranslateOption
                 updateLanguage={this.updateSelectedLanguageHandler}
                 selectedLanguage={this.state.selectedLanguage}
@@ -311,6 +311,13 @@ export default class App extends Component {
             <View
               style={[styles.results, { flex: this.state.showWelcome ? 1 : 0 }]}
             >
+              {this.state.pickedImage.uri && !this.state.loading ? (
+                <Image
+                  style={styles.image}
+                  source={{ uri: this.state.pickedImage.uri }}
+                />
+              ) : null}
+
               {this.state.wordAssociationArray.length > 0 &&
               !this.state.loading ? (
                 <Table
@@ -320,12 +327,18 @@ export default class App extends Component {
                 />
               ) : null}
 
-              {this.state.pickedImage.uri && !this.state.loading ? (
-                <Image
-                  style={styles.image}
-                  source={{ uri: this.state.pickedImage.uri }}
+              {!this.state.showWelcome && this.state.showPickLanguage && !this.state.loading ? (
+                <TranslateOption
+                  updateLanguage={this.updateSelectedLanguageHandler}
+                  selectedLanguage={this.state.selectedLanguage}
+                  enablePhotoButton={this.state.enablePhotoButton}
+                  pressed={this.pickImageHandler}
+                  showButton={this.state.showButton}
+                  loading={this.state.loading}
+                  showWelcome={this.state.showWelcome}
                 />
               ) : null}
+              
             </View>
           </View>
         </ScrollView>
@@ -356,7 +369,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     marginLeft: "2.5%",
-    marginRight: "2.5%"
+    marginRight: "2.5%",
+    marginBottom: "2.5%"
   },
   text: {
     textAlign: "center",
