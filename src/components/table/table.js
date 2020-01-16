@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import Tts from 'react-native-tts';
 
 export default class Table extends Component {
@@ -17,6 +17,13 @@ export default class Table extends Component {
   }
 
   renderRow(set, indx) {
+    const button2 = (
+      <TouchableOpacity style={styles.button} onPress={() => this.saySpeech(set.translated, this.props.selectedLanguage)}>
+        <View style={styles.buttonTextWrapper}>
+          <Text style={styles.buttonText}>Click to say aloud</Text>
+        </View>
+      </TouchableOpacity>
+    );
     const button = (set.english.length > 0 && set.translated.length > 0) ? <Button title="Say Aloud" style={styles.button} onPress={() => this.saySpeech(set.translated, this.props.selectedLanguage)} /> : null;
     return (
         <View style={styles.rows} key={indx}>
@@ -27,7 +34,7 @@ export default class Table extends Component {
           <View style={[styles.cells, { alignItems: "center" }]}>
             <Text style={styles.text}>{set.translated}</Text>
           </View>
-          {button}
+          {button2}
         </View>
     );
   }
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignContent: "center",
     overflow: "hidden",
-    height: 80,
+    height: 99,
     width: "100%",
     borderTopColor: "#E5E5E5",
     borderTopWidth: 0.5
@@ -69,7 +76,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#E5E5E5",
     borderBottomWidth: 1
   },
-  cells: {},
+  cells: {
+    height: 33
+  },
   text: {
     fontSize: 20,
     fontFamily: "Roboto"
@@ -86,8 +95,30 @@ const styles = StyleSheet.create({
     textAlign: "center"
   },
   button: {
-    width: "80%",
-    color: "orange",
-    padding: 0,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+    height: 33,
+    padding: 5,
+    margin: 0,
+  },
+  buttonTextWrapper: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "auto",
+    height: "auto",
+    paddingLeft: 5,
+    paddingRight: 5,
+    margin: 0,
+    borderColor: "orange",
+    borderRadius: 20,
+    borderWidth: 1,
+  },
+  buttonText: {
+    textAlign: "center",
+    fontSize: 20,
+    color: "orange"
   }
 });
